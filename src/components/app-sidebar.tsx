@@ -7,6 +7,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -14,6 +15,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { SiOpenai } from "react-icons/si";
+import { useEffect } from "react";
 
 // Menu items.
 const items = [
@@ -36,19 +38,25 @@ const items = [
 
 export function AppSidebar() {
   const { toggleSidebar } = useSidebar();
+  const { state } = useSidebar();
   return (
-    <Sidebar>
+    <Sidebar className="py-1" collapsible="icon">
+      <SidebarHeader
+        className={`px-4 flex ${
+          state === "expanded" ? "flex-row" : "flex-col"
+        } items-center justify-between`}
+      >
+        <div className="flex items-center gap-1">
+          <SiOpenai
+            onClick={toggleSidebar}
+            className="text-black dark:text-white cursor-e-resize hover:bg-sidebar-accent"
+            title="expand"
+          />
+        </div>
+        {state === "expanded" && <SidebarTrigger className="cursor-e-resize" />}
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <div className="flex justify-between items-center">
-            <SidebarGroupLabel className="flex gap-1">
-              <SiOpenai className="text-black dark:text-white cursor-pointer" />
-              <p>CloneGPT</p>
-            </SidebarGroupLabel>
-            <button onClick={toggleSidebar} className="sm:hidden">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
