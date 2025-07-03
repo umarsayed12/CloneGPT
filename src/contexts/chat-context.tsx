@@ -14,9 +14,11 @@ interface MessageProps {
 const ChatContext = createContext<{
   messages: MessageProps[];
   addMessage: (message: MessageProps) => void;
+  setMessages: React.Dispatch<React.SetStateAction<MessageProps[]>>;
 }>({
   messages: [],
   addMessage: () => {},
+  setMessages: () => {},
 });
 
 export const useChat = () => useContext(ChatContext);
@@ -29,7 +31,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   };
 
   return (
-    <ChatContext.Provider value={{ messages, addMessage }}>
+    <ChatContext.Provider value={{ messages, addMessage, setMessages }}>
       {children}
     </ChatContext.Provider>
   );
