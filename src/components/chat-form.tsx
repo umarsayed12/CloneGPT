@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Message } from "ai";
 import { Bot } from "lucide-react";
 import { useEffect, useRef } from "react";
+import FormattedResponse from "./formattedResponse";
 
 interface ChatFormProps {
   messages: Message[];
@@ -43,7 +44,13 @@ const ChatForm = ({ messages, isLoading }: ChatFormProps) => {
                 : "bg-transparent w-full text-gray-900"
             )}
           >
-            <div className="prose prose-sm max-w-none">{message.content}</div>
+            <div className="prose prose-sm max-w-none">
+              {message.role === "user" ? (
+                message.content
+              ) : (
+                <FormattedResponse content={message.content} />
+              )}
+            </div>
           </div>
         </div>
       ))}

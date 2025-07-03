@@ -87,7 +87,7 @@ const ChatInput = ({
   return (
     <div
       className={cn(
-        "w-full mx-auto transition-all duration-300 ease-in-out",
+        "w-full mx-auto transition-all duration-300 ease-in-out bg-white",
         !hasMessages
           ? "h-full flex flex-col items-center justify-end"
           : "fixed bottom-6 max-w-[90%] sm:max-w-[70%] lg:max-w-[60%] xl:max-w-[50%]"
@@ -213,8 +213,8 @@ const ChatInput = ({
             </Button>
           </div>
         </form>
-        <div className="text-center mt-3">
-          <p className="text-xs text-gray-500">
+        <div className="text-center mt-3 bg-white">
+          <p className="text-xs text-gray-500 bg-white">
             CloneGPT can make mistakes. Consider checking important information.
           </p>
         </div>
