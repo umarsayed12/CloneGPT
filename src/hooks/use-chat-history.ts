@@ -10,7 +10,7 @@ export function useChatHistory(sessionId: string) {
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/chat/history?sessionId=${sessionId}`);
+      const response = await fetch(`/api/chat?sessionId=${sessionId}`);
       if (response.ok) {
         const data = await response.json();
         setMessages(data.messages || []);

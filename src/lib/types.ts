@@ -10,3 +10,15 @@ export interface SaveChatParams {
   messages: ChatMessage[];
   userId?: string;
 }
+
+export interface ChatSession {
+  sessionId: string;
+  messages: ChatMessage[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AllChatsResponse {
+  userId: string;
+  chats: ChatSession[];
+}

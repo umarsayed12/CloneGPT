@@ -2,10 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { Message } from "ai";
-import { Bot } from "lucide-react";
 import { useEffect, useRef } from "react";
 import FormattedResponse from "./formattedResponse";
-
 interface ChatFormProps {
   messages: Message[];
   isLoading: boolean;
@@ -19,7 +17,11 @@ const ChatForm = ({ messages, isLoading }: ChatFormProps) => {
   }, [messages]);
 
   return (
-    <div className="flex flex-col gap-10 max-w-4xl w-full mx-auto px-4 pt-6">
+    <div
+      className={`${
+        messages.length ? "pb-40" : ""
+      } flex flex-col gap-10 max-w-4xl w-full mx-auto px-4 pt-6`}
+    >
       {messages.length === 0 && (
         <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
           <div className="px-1 text-pretty text-3xl whitespace-pre-wrap">
@@ -57,18 +59,26 @@ const ChatForm = ({ messages, isLoading }: ChatFormProps) => {
 
       {isLoading && (
         <div className="flex gap-4 group justify-start">
-          <div className="bg-gray-100 text-gray-900 rounded-2xl px-4 py-3 max-w-[85%] sm:max-w-[75%]">
+          <div className="text-gray-900 rounded-2xl px-4 py-3 max-w-[85%] sm:max-w-[75%]">
             <div className="flex items-center space-x-2">
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                 <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.1s" }}
+                  className="w-4 h-4 bg-black rounded-full animate-pulse"
+                  style={{
+                    animation: "scaleUpDown 2s ease-in-out infinite",
+                  }}
                 ></div>
-                <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.2s" }}
-                ></div>
+                <style jsx>{`
+                  @keyframes scaleUpDown {
+                    0%,
+                    100% {
+                      transform: scale(1);
+                    }
+                    50% {
+                      transform: scale(0.8);
+                    }
+                  }
+                `}</style>
               </div>
             </div>
           </div>

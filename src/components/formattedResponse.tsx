@@ -12,7 +12,7 @@ type Props = {
 
 const FormattedResponse: React.FC<Props> = ({ content }) => {
   return (
-    <div className="prose prose-neutral dark:prose-invert max-w-none text-base leading-relaxed">
+    <div className="prose space-y-8 prose-neutral dark:prose-invert max-w-none text-base leading-relaxed">
       <ReactMarkdown
         components={{
           code({ node, inline, className, children, ...props }: any) {

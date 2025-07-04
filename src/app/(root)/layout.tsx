@@ -1,14 +1,8 @@
 "use client";
 import { AppHeader } from "@/components/app-header";
 import { AppSidebar } from "@/components/app-sidebar";
-import {
-  SidebarProvider,
-  SidebarTrigger,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-
 export default function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
