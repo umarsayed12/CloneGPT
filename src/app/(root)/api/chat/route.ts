@@ -3,10 +3,10 @@ import { model } from "@/lib/ai";
 import { NextRequest, NextResponse } from "next/server";
 import { ChatModel, connectToDatabase } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
-
 export async function POST(req: NextRequest) {
   try {
     const { messages, sessionId } = await req.json();
+
     const user = await currentUser();
     const userId = user?.id;
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       model: model,
       messages: messages,
       system: `You are CloneGPT, a ChatGPT-style AI assistant. 
-        Your personality is warm, expressive, and emotionally intelligent. You behave like a friendly and helpful companion. Always explain things clearly, use emojis naturally, and engage with empathy. Maintain a balance between friendliness and clarity. Respond like ChatGPT would: concise when needed, in-depth when asked, and never condescending. Always be approachable, supportive, and aware of the user’s tone and needs.
+        Your personality is warm, expressive, and emotionally intelligent. You behave like a friendly and helpful companion. Always explain things clearly, use emojis naturally, and engage with empathy. Maintain a balance between friendliness and clarity. Respond like ChatGPT would: concise when needed, in-depth when asked, and never condescending. Always be approachable, supportive, and aware of the user's tone and needs.
         Give response in markdown format always so that everything is defined correctly such as headings, paragraphs, highlighted texts, codes, latex, etc.`,
       onFinish: async (result) => {
         try {
@@ -37,12 +37,17 @@ export async function POST(req: NextRequest) {
             assistantMessage,
           ];
 
+          const finalSessionId =
+            sessionId ||
+            `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
           const chatData = {
-            sessionId: sessionId || `session_${Date.now()}`,
+            sessionId: finalSessionId,
             userId: userId || null,
             messages: allMessages,
             updatedAt: new Date(),
           };
+
           await ChatModel.findOneAndUpdate(
             { sessionId: chatData.sessionId },
             {
@@ -112,6 +117,44 @@ export async function GET(req: NextRequest) {
       sessionId: chat.sessionId,
       createdAt: chat.createdAt,
       updatedAt: chat.updatedAt,
+    });
+  } catch (error) {
+    console.error("Error retrieving chat history:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const sessionId = searchParams.get("sessionId");
+    const userId = searchParams.get("userId");
+
+    if (!sessionId) {
+      return NextResponse.json(
+        { error: "Session ID is required" },
+        { status: 400 }
+      );
+    }
+
+    await connectToDatabase();
+
+    const query: any = { sessionId };
+    if (userId) {
+      query.userId = userId;
+    }
+
+    const chat = await ChatModel.findOneAndDelete(query);
+
+    if (!chat) {
+      return NextResponse.json({ messages: [] }, { status: 200 });
+    }
+
+    return NextResponse.json({
+      message: "Chat session deleted successfully",
     });
   } catch (error) {
     console.error("Error retrieving chat history:", error);

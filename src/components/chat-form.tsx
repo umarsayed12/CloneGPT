@@ -1,16 +1,20 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Message } from "ai";
-import { useEffect, useRef } from "react";
+import { Message, useChat } from "ai/react";
+import { useEffect, useRef, useState } from "react";
 import FormattedResponse from "./formattedResponse";
+
 interface ChatFormProps {
   messages: Message[];
   isLoading: boolean;
+  onEdit?: (editedContent: string, index: number) => void;
 }
 
-const ChatForm = ({ messages, isLoading }: ChatFormProps) => {
+const ChatForm = ({ messages, isLoading, onEdit }: ChatFormProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editedContent, setEditedContent] = useState<string>("");
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,13 +38,13 @@ const ChatForm = ({ messages, isLoading }: ChatFormProps) => {
         <div
           key={message.id || index}
           className={cn(
-            "flex gap-4 group",
+            "flex gap-4 group transition-opacity duration-300",
             message.role === "user" ? "justify-end" : "justify-start"
           )}
         >
           <div
             className={cn(
-              "rounded-4xl px-5 py-3 break-words",
+              "rounded-4xl px-5 py-3 break-words relative transition-all duration-300 ease-in-out",
               message.role === "user"
                 ? "bg-neutral-300 text-black ml-auto max-w-[85%] sm:max-w-[75%]"
                 : "bg-transparent w-full text-gray-900"
@@ -48,7 +52,9 @@ const ChatForm = ({ messages, isLoading }: ChatFormProps) => {
           >
             <div className="prose prose-sm max-w-none">
               {message.role === "user" ? (
-                message.content
+                <div className="flex justify-between items-center gap-2">
+                  <span>{message.content}</span>
+                </div>
               ) : (
                 <FormattedResponse content={message.content} />
               )}
@@ -58,7 +64,7 @@ const ChatForm = ({ messages, isLoading }: ChatFormProps) => {
       ))}
 
       {isLoading && (
-        <div className="flex gap-4 group justify-start">
+        <div className="flex gap-4 group justify-start animate-fadeIn">
           <div className="text-gray-900 rounded-2xl px-4 py-3 max-w-[85%] sm:max-w-[75%]">
             <div className="flex items-center space-x-2">
               <div className="flex space-x-1">

@@ -1,36 +1,44 @@
 "use client";
 
 import { useChat } from "ai/react";
-import { useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import ChatForm from "@/components/chat-form";
 import ChatInput from "@/components/chat-input";
 import { useChatHistory } from "@/hooks/use-chat-history";
+import { useChatContext } from "@/contexts/chat-context";
+import { useState } from "react";
+
 export default function ChatPage() {
-  const router = useRouter();
-  const params = useParams();
-  const routeSessionId = params.sessionId as string;
+  const { sessionId } = useParams();
+  const { refreshChats, setMessages } = useChatContext();
 
-  const [sessionId, setSessionId] = useState(routeSessionId);
+  const actualSessionId = sessionId as string;
   const { messages: historyMessages, loading: historyLoading } =
-    useChatHistory(sessionId);
+    useChatHistory(actualSessionId);
+  const [count, setCount] = useState(0);
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    append,
+    reload,
+  } = useChat({
+    api: "/api/chat",
+    body: { sessionId: actualSessionId },
+    initialMessages: historyMessages,
+    onFinish: async (message) => {
+      if (count < 1) {
+        refreshChats();
+        setCount((prev) => prev + 1);
+      }
+    },
+    onError: (error) => {
+      console.error("Chat error:", error);
+    },
+  });
 
-  useEffect(() => {
-    if (routeSessionId === "" && messages.length > 0) {
-      const newId = `session_${Date.now()}`;
-      router.replace(`api/chat/${newId}`);
-      setSessionId(newId);
-    }
-  }, [routeSessionId, router, historyMessages]);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({
-      api: "/api/chat",
-      body: { sessionId },
-      initialMessages: historyMessages,
-      onError: (error) => {
-        console.error("Chat error:", error);
-      },
-    });
   return (
     <div
       className={`flex items-center justify-center ${

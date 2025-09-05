@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AllChatsResponse, ChatSession } from "@/lib/types";
 
-export function useAllChats(userId: string) {
+export function useAllChats(userId: string | undefined) {
   const [chats, setChats] = useState<ChatSession[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const loadAllChats = async () => {
+  const loadAllChats = useCallback(async () => {
     if (!userId) return;
 
     setLoading(true);
@@ -20,11 +20,15 @@ export function useAllChats(userId: string) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     loadAllChats();
-  }, [userId]);
+  }, [loadAllChats]);
 
-  return { chats, loading };
+  return {
+    chats,
+    loading,
+    refetch: loadAllChats,
+  };
 }
