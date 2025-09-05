@@ -143,7 +143,7 @@ export async function DELETE(req: NextRequest) {
 
     await connectToDatabase();
 
-    const query: any = { sessionId };
+    const query: Record<string, string | null> = { sessionId };
     if (userId) {
       query.userId = userId;
     }

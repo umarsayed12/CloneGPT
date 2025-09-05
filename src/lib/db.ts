@@ -9,9 +9,6 @@ let cached: MongooseCache = (
   conn: null,
   promise: null,
 };
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
-}
 
 export async function connectToDatabase() {
   if (cached.conn) {

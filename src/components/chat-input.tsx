@@ -55,13 +55,6 @@ const ChatInput = ({
   const { isSignedIn } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const form = useForm<z.infer<typeof ChatFormSchema>>({
-    resolver: zodResolver(ChatFormSchema),
-    defaultValues: {
-      content: "",
-    },
-  });
-
   const handleFileSelect = (files: FileList | null) => {
     if (files && files.length > 0) {
       setSelectedFile(files[0]);
