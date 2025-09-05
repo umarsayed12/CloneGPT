@@ -11,29 +11,9 @@ import {
 import { Button } from "./ui/button";
 import { ArrowUp, Globe, Paperclip, X } from "lucide-react";
 import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@clerk/nextjs";
 import { Input } from "./ui/input";
 import UnauthorizedCard from "./ui/unauthorized-card";
-
-const ChatFormSchema = z
-  .object({
-    content: z.string().min(1, { message: "This field is required." }),
-    file: z
-      .custom<FileList>((val) => val instanceof FileList && val.length > 0, {
-        message: "This field is required.",
-      })
-      .optional(),
-  })
-  .refine(
-    (data) => {
-      return data.content || (data.file && data.file?.length > 0);
-    },
-    {
-      message: "This field is required.",
-    }
-  );
 
 interface ChatInputProps {
   input: string;

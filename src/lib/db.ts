@@ -3,7 +3,7 @@ interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
-let cached: MongooseCache = (
+const cached: MongooseCache = (
   global as typeof globalThis & { mongoose?: MongooseCache }
 ).mongoose ?? {
   conn: null,

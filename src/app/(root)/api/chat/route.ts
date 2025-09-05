@@ -19,8 +19,6 @@ export async function POST(req: NextRequest) {
         Give response in markdown format always so that everything is defined correctly such as headings, paragraphs, highlighted texts, codes, latex, etc.`,
       onFinish: async (result) => {
         try {
-          console.log(result);
-
           await connectToDatabase();
           const assistantMessage = {
             id: `msg_${Date.now()}`,

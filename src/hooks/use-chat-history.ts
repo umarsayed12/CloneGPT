@@ -36,7 +36,7 @@ export function useChatHistory(sessionId: string) {
 
   useEffect(() => {
     loadChatHistory();
-  }, [sessionId, loadChatHistory]);
+  }, [sessionId]);
 
   return { messages, loading, saveChatHistory };
 }
