@@ -1,7 +1,20 @@
 import { MemoryClient } from "mem0ai";
 
 let memoryClient: MemoryClient | null = null;
-
+interface MemoryItem {
+  id?: string;
+  content?: string;
+  text?: string;
+  metadata?: {
+    user_id?: string;
+    userId?: string;
+    sessionId?: string;
+    timestamp?: string;
+  };
+  score?: number;
+  created_at?: string | Date;
+  updated_at?: string | Date;
+}
 export function getMemoryClient(): MemoryClient {
   if (!memoryClient) {
     memoryClient = new MemoryClient({
@@ -54,7 +67,7 @@ export async function getMemories(
     }
 
     const memoryText = memories
-      .map((memory: any) => memory.content || memory.text)
+      .map((memory: MemoryItem) => memory.content || memory.text)
       .filter(Boolean)
       .join("\n");
 
