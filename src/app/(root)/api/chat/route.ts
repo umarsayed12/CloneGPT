@@ -4,19 +4,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { ChatModel, connectToDatabase } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { ChatMessage } from "@/lib/types";
+import { saveToMemory, getMemories } from "@/lib/memory";
+
 export async function POST(req: NextRequest) {
   try {
     const { messages, sessionId } = await req.json();
-
     const user = await currentUser();
-    const userId = user?.id;
-
+    const userId = user?.id || "";
+    const memoryContext = await getMemories(userId, sessionId, 15);
     const result = streamText({
       model: model,
       messages: messages,
       system: `You are CloneGPT, a ChatGPT-style AI assistant. 
         Your personality is warm, expressive, and emotionally intelligent. You behave like a friendly and helpful companion. Always explain things clearly, use emojis naturally, and engage with empathy. Maintain a balance between friendliness and clarity. Respond like ChatGPT would: concise when needed, in-depth when asked, and never condescending. Always be approachable, supportive, and aware of the user's tone and needs.
-        Give response in markdown format always so that everything is defined correctly such as headings, paragraphs, highlighted texts, codes, latex, etc.`,
+        Give response in markdown format always so that everything is defined correctly such as headings, paragraphs, highlighted texts, codes, latex, etc.
+        Your History Memory Context : ${memoryContext}`,
       onFinish: async (result) => {
         try {
           await connectToDatabase();
@@ -65,10 +67,11 @@ export async function POST(req: NextRequest) {
               runValidators: true,
             }
           );
-
-          console.log(
-            `Chat saved successfully for session: ${chatData.sessionId}`
-          );
+          if (result.text && userId) {
+            saveToMemory(result.text, userId, finalSessionId).catch((error) => {
+              console.error("Error saving to memory:", error);
+            });
+          }
         } catch (error) {
           console.error("Error saving chat:", error);
         }
