@@ -10,7 +10,6 @@ import {
 } from "./ui/dropdown";
 import { Button } from "./ui/button";
 import { ArrowUp, Globe, Paperclip, X } from "lucide-react";
-import * as z from "zod";
 import { useAuth } from "@clerk/nextjs";
 import { Input } from "./ui/input";
 import UnauthorizedCard from "./ui/unauthorized-card";
