@@ -3,7 +3,7 @@ import { Button } from "./button";
 import { Card, CardContent, CardFooter, CardHeader } from "./card";
 import Image from "next/image";
 
-export default function UnauthorizedCard({ className }: any) {
+export default function UnauthorizedCard() {
   return (
     <Card className="p-0 max-w-xs w-full border-0 shadow-none">
       <CardHeader className="relative hidden md:block p-0 w-full h-[130px]">

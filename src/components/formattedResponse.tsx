@@ -14,7 +14,13 @@ const FormattedResponse: React.FC<Props> = ({ content }) => {
     <div className="prose space-y-8 prose-neutral dark:prose-invert max-w-none text-base leading-relaxed">
       <ReactMarkdown
         components={{
-          code({ node, inline, className, children, ...props }: any) {
+          code: (props) => {
+            const { inline, className, children } = props as {
+              inline?: boolean;
+              className?: string;
+              children: React.ReactNode;
+            };
+
             const match = /language-(\w+)/.exec(className || "");
 
             return !inline ? (
@@ -23,12 +29,11 @@ const FormattedResponse: React.FC<Props> = ({ content }) => {
                 language={match?.[1] || "javascript"}
                 PreTag="div"
                 className="rounded-xl my-4"
-                {...props}
               >
                 {String(children).replace(/\n$/, "")}
               </SyntaxHighlighter>
             ) : (
-              <code className="bg-muted px-1 py-0.5 rounded text-sm" {...props}>
+              <code className="bg-muted px-1 py-0.5 rounded text-sm">
                 {children}
               </code>
             );

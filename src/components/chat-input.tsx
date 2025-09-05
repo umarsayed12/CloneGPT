@@ -130,11 +130,11 @@ const ChatInput = ({
               placeholder="Ask anything"
               className="w-full resize-none border-0 focus-visible:ring-0 text-base shadow-none bg-transparent placeholder:text-gray-400 min-h-[20px] max-h-[200px]"
               rows={1}
-              onKeyDown={(e) => {
+              onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   if (input.trim()) {
-                    onSubmit(e as any);
+                    onSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
                   }
                 }
               }}

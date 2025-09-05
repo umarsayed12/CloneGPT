@@ -1,7 +1,14 @@
 import mongoose from "mongoose";
-
-let cached = (global as any).mongoose;
-
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+let cached: MongooseCache = (
+  global as typeof globalThis & { mongoose?: MongooseCache }
+).mongoose ?? {
+  conn: null,
+  promise: null,
+};
 if (!cached) {
   cached = (global as any).mongoose = { conn: null, promise: null };
 }

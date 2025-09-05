@@ -3,6 +3,7 @@ import { model } from "@/lib/ai";
 import { NextRequest, NextResponse } from "next/server";
 import { ChatModel, connectToDatabase } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
+import { ChatMessage } from "@/lib/types";
 export async function POST(req: NextRequest) {
   try {
     const { messages, sessionId } = await req.json();
@@ -28,11 +29,11 @@ export async function POST(req: NextRequest) {
             timestamp: new Date(),
           };
           const allMessages = [
-            ...messages.map((msg: any, index: number) => ({
+            ...messages.map((msg: ChatMessage, index: number) => ({
               id: msg.id || `msg_${Date.now()}_${index}`,
               role: msg.role,
               content: msg.content,
-              timestamp: msg.timestamp || new Date(),
+              timestamp: msg.createdAt || new Date(),
             })),
             assistantMessage,
           ];
@@ -101,7 +102,7 @@ export async function GET(req: NextRequest) {
 
     await connectToDatabase();
 
-    const query: any = { sessionId };
+    const query: Record<string, string | null> = { sessionId };
     if (userId) {
       query.userId = userId;
     }
