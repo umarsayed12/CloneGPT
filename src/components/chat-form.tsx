@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Message, useChat } from "ai/react";
-import { useEffect, useRef, useState } from "react";
+import { Message } from "ai/react";
+import { useEffect, useRef } from "react";
 import FormattedResponse from "./formattedResponse";
 
 interface ChatFormProps {
@@ -11,10 +11,8 @@ interface ChatFormProps {
   onEdit?: (editedContent: string, index: number) => void;
 }
 
-const ChatForm = ({ messages, isLoading, onEdit }: ChatFormProps) => {
+const ChatForm = ({ messages, isLoading }: ChatFormProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editedContent, setEditedContent] = useState<string>("");
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

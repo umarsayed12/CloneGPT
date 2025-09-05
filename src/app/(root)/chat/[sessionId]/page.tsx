@@ -10,34 +10,27 @@ import { useState } from "react";
 
 export default function ChatPage() {
   const { sessionId } = useParams();
-  const { refreshChats, setMessages } = useChatContext();
+  const { refreshChats } = useChatContext();
 
   const actualSessionId = sessionId as string;
   const { messages: historyMessages, loading: historyLoading } =
     useChatHistory(actualSessionId);
   const [count, setCount] = useState(0);
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    append,
-    reload,
-  } = useChat({
-    api: "/api/chat",
-    body: { sessionId: actualSessionId },
-    initialMessages: historyMessages,
-    onFinish: async (message) => {
-      if (count < 1) {
-        refreshChats();
-        setCount((prev) => prev + 1);
-      }
-    },
-    onError: (error) => {
-      console.error("Chat error:", error);
-    },
-  });
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      api: "/api/chat",
+      body: { sessionId: actualSessionId },
+      initialMessages: historyMessages,
+      onFinish: async () => {
+        if (count < 1) {
+          refreshChats();
+          setCount((prev) => prev + 1);
+        }
+      },
+      onError: (error) => {
+        console.error("Chat error:", error);
+      },
+    });
 
   return (
     <div

@@ -8,7 +8,6 @@ import {
   SquarePen,
   StarsIcon,
   Trash2,
-  X,
 } from "lucide-react";
 
 import {
@@ -29,7 +28,6 @@ import { SiOpenai } from "react-icons/si";
 import { useEffect, useState } from "react";
 import { useAllChats } from "@/hooks/use-all-chats";
 import { useUser } from "@clerk/nextjs";
-import { useChatHistory } from "@/hooks/use-chat-history";
 import Link from "next/link";
 import { useChatContext } from "@/contexts/chat-context";
 import { useDeleteHistory } from "@/hooks/use-delete-history";

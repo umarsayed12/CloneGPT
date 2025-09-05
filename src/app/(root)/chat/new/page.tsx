@@ -14,31 +14,23 @@ export default function NewChatPage() {
   const { refreshChats } = useChatContext();
   const [hasRedirected, setHasRedirected] = useState(false);
   const [newSessionId, setNewSessionId] = useState<string>("");
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    append,
-    setMessages,
-    reload,
-  } = useChat({
-    api: "/api/chat",
-    body: {
-      sessionId: newSessionId,
-    },
-    onFinish: async (message) => {
-      if (!hasRedirected && user?.id && newSessionId) {
-        setHasRedirected(true);
-        router.replace(`/chat/${newSessionId}`);
-        refreshChats();
-      }
-    },
-    onError: (error) => {
-      console.error("Chat error:", error);
-    },
-  });
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      api: "/api/chat",
+      body: {
+        sessionId: newSessionId,
+      },
+      onFinish: async () => {
+        if (!hasRedirected && user?.id && newSessionId) {
+          setHasRedirected(true);
+          router.replace(`/chat/${newSessionId}`);
+          refreshChats();
+        }
+      },
+      onError: (error) => {
+        console.error("Chat error:", error);
+      },
+    });
 
   useEffect(() => {
     if (!newSessionId) {

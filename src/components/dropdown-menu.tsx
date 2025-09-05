@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown";
 import { ChevronDown, StarsIcon } from "lucide-react";
-import Link from "next/link";
 import { SiOpenbadges } from "react-icons/si";
 import { useAuth } from "@clerk/nextjs";
 import UnauthorizedCard from "./ui/unauthorized-card";
@@ -18,7 +16,7 @@ type Checked = DropdownMenuCheckboxItemProps["checked"];
 export default function DropdownMenuTitle() {
   const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
   const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isSignedIn } = useAuth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

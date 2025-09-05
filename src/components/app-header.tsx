@@ -1,14 +1,12 @@
 "use client";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import * as React from "react";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "./ui/sidebar";
 import Link from "next/link";
 import DropdownMenuTitle from "./dropdown-menu";
-type Checked = DropdownMenuCheckboxItemProps["checked"];
 export function AppHeader() {
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isSignedIn } = useAuth();
   return (
     <div className="p-2 border-b-2 w-full flex justify-between">
       <div className="flex items-center">
